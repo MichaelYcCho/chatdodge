@@ -1,43 +1,58 @@
 const chatBox = document.querySelector('.chat-box');
-        let userMessages = [];
-        let assistantMessages = [];
+let userMessages = [];
+let assistantMessages = [];
+let myDateTime = ''
 
-        const sendMessage = async () => {
-            const chatInput = document.querySelector('.chat-input input');
-            const chatMessage = document.createElement('div');
-            chatMessage.classList.add('chat-message');
-            chatMessage.innerHTML = `
-    <p>${chatInput.value}</p>
-  `;
-            chatBox.appendChild(chatMessage);
-            
-            //userMessage 메세지 추가
-            userMessages.push(chatInput.value);
+function start() {
+    const date = document.getElementById('date').value;
+    const hour = document.getElementById('hour').value;
+    if (date === '') {
+        alert('생년월일을 입력해주세요.');
+        return;
+    }
+    myDateTime = date + hour;
 
-            chatInput.value = '';
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("chat").style.display = "block";
+}
 
-            const response = await fetch('http://localhost:3000/fortune-tell', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userMessages: userMessages,
-                    assistantMessages: assistantMessages,
-                })
-            });
+const sendMessage = async () => {
+    const chatInput = document.querySelector('.chat-input input');
+    const chatMessage = document.createElement('div');
+    chatMessage.classList.add('chat-message');
+    chatMessage.innerHTML = `
+<p>${chatInput.value}</p>
+`;
+    chatBox.appendChild(chatMessage);
+    
+    //userMessage 메세지 추가
+    userMessages.push(chatInput.value);
 
-            const data = await response.json();
-            
-            //assistantMessage 메세지 추가
-            assistantMessages.push(data.assistant);
+    chatInput.value = '';
 
-            const astrologerMessage = document.createElement('div');
-            astrologerMessage.classList.add('chat-message');
-            astrologerMessage.innerHTML = `
-    <p class='assistant'>${data.assistant}</p>
-  `;
-            chatBox.appendChild(astrologerMessage);
-        };
+    const response = await fetch('http://localhost:3000/fortune-tell', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            myDateTime: myDateTime,
+            userMessages: userMessages,
+            assistantMessages: assistantMessages,
+        })
+    });
 
-        document.querySelector('.chat-input button').addEventListener('click', sendMessage);
+    const data = await response.json();
+    
+    //assistantMessage 메세지 추가
+    assistantMessages.push(data.assistant);
+
+    const astrologerMessage = document.createElement('div');
+    astrologerMessage.classList.add('chat-message');
+    astrologerMessage.innerHTML = `
+<p class='assistant'>${data.assistant}</p>
+`;
+    chatBox.appendChild(astrologerMessage);
+};
+
+document.querySelector('.chat-input button').addEventListener('click', sendMessage);
