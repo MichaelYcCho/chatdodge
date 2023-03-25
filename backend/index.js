@@ -22,7 +22,7 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // POST method route
-app.get('/fortune-tell', async function (req, res) {
+app.post('/fortune-tell', async function (req, res) {
     const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
@@ -34,7 +34,7 @@ app.get('/fortune-tell', async function (req, res) {
     });
     let fortune = completion.data.choices[0].message['content']
     console.log(fortune);
-    res.send(fortune);
+    res.json({"assistant": fortune})
 });
 
 app.listen(3000)
