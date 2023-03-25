@@ -1,3 +1,4 @@
+const serverless = require('serverless-http');
 const { Configuration, OpenAIApi } = require("openai");
 const express = require('express');
 require('dotenv').config();
@@ -12,10 +13,11 @@ const openai = new OpenAIApi(configuration);
 
 
 let corsOptions = {
-    origin: 'http://localhost:3000',
+    // TODO: 람다 도메인으로 변경해야함
+    origin: 'http://localhost:5555',
     credentials: true,
 }
-app.use(cors());
+app.use(cors(corsOptions));
 
 //POST 요청 받을 수 있게 만듬
 app.use(express.json()) // for parsing application/json
@@ -57,4 +59,6 @@ app.post('/fortune-tell', async function (req, res) {
     res.json({"assistant": fortune});
 });
 
-app.listen(3000)
+module.exports.handler = serverless(app);
+
+//app.listen(3000)
