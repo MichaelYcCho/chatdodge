@@ -48,9 +48,12 @@
                 <p class="assistant">운세에 대해서 물어봐 주세요!</p>
             </div>
         </div>
+        <div id="loader" class="loader" style="display: none;">
+            <i class="fa fa-spinner fa-spin"></i>
+        </div>
         <div class="chat-input">
             <input type="text" placeholder="Type your message here...">
-            <button>Send</button>
+            <button id="btn" onclick="spinner()">Send</button>
         </div>
     </div>
     <script src="scripts.js"></script>
