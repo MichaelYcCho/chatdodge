@@ -1,33 +1,43 @@
 const chatBox = document.querySelector('.chat-box');
+        let userMessages = [];
+        let assistantMessages = [];
 
-const sendMessage = async () => {
-    const chatInput = document.querySelector('.chat-input input');
-    const chatMessage = document.createElement('div');
-    chatMessage.classList.add('chat-message');
-    chatMessage.innerHTML = `
-<p>${chatInput.value}</p>
-`;
-    chatBox.appendChild(chatMessage);
-    chatInput.value = '';
+        const sendMessage = async () => {
+            const chatInput = document.querySelector('.chat-input input');
+            const chatMessage = document.createElement('div');
+            chatMessage.classList.add('chat-message');
+            chatMessage.innerHTML = `
+    <p>${chatInput.value}</p>
+  `;
+            chatBox.appendChild(chatMessage);
+            
+            //userMessage 메세지 추가
+            userMessages.push(chatInput.value);
 
-    const response = await fetch('http://localhost:3000/fortune-tell', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            message: chatInput.value
-        })
-    });
+            chatInput.value = '';
 
-    const data = await response.json();
+            const response = await fetch('http://localhost:3000/fortune-tell', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userMessages: userMessages,
+                    assistantMessages: assistantMessages,
+                })
+            });
 
-    const astrologerMessage = document.createElement('div');
-    astrologerMessage.classList.add('chat-message');
-    astrologerMessage.innerHTML = `
-<p class='assistant'>${data.assistant}</p>
-`;
-    chatBox.appendChild(astrologerMessage);
-};
+            const data = await response.json();
+            
+            //assistantMessage 메세지 추가
+            assistantMessages.push(data.assistant);
 
-document.querySelector('.chat-input button').addEventListener('click', sendMessage);
+            const astrologerMessage = document.createElement('div');
+            astrologerMessage.classList.add('chat-message');
+            astrologerMessage.innerHTML = `
+    <p class='assistant'>${data.assistant}</p>
+  `;
+            chatBox.appendChild(astrologerMessage);
+        };
+
+        document.querySelector('.chat-input button').addEventListener('click', sendMessage);
