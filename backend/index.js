@@ -8,11 +8,11 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 async function api_call(){
-    const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: "Hello world",
-    });
-    console.log(completion.data.choices[0].text);
+    const completion = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{role: "user", content: "Hello world"}],
+      });
+    console.log(completion.data.choices[0].message);
 }
 
 api_call();
