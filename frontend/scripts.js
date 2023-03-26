@@ -25,8 +25,8 @@ const sendMessage = async () => {
     const chatMessage = document.createElement('div');
     chatMessage.classList.add('chat-message');
     chatMessage.innerHTML = `
-    <p>${chatInput.value}</p>
-  `;
+<p>${chatInput.value}</p>
+`;
     chatBox.appendChild(chatMessage);
 
     //userMessage 메세지 추가
@@ -54,9 +54,16 @@ const sendMessage = async () => {
 
     const astrologerMessage = document.createElement('div');
     astrologerMessage.classList.add('chat-message');
-    astrologerMessage.innerHTML = `
-    <p class='assistant'>${data.assistant}</p>
-  `;
+    astrologerMessage.innerHTML = `<p class='assistant'>${data.assistant}</p>`;
+    const p = document.createElement('p');
+    p.innerHTML = '추가로 링크를 눌러 작은 정성 배풀어주시면 더욱 좋은 운이 있으실겁니다. => ';
+    p.classList.add("assistant");
+    const link = document.createElement('a');
+    link.href = 'https://toss.me/';
+    link.innerHTML = '복채 보내기';
+    p.appendChild(link);
+    astrologerMessage.appendChild(p);
+    "<p> <a href='https://toss.me/jocoding'>복채 보내기</a></p>";
     chatBox.appendChild(astrologerMessage);
 };
 
